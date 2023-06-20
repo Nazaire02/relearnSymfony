@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SymRecipe - Mes recettes{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Mes recettes</h1>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <a href="{{ path('recette.new')}}" class="btn btn-primary">Créer un ingredient</a>
+        <div class="count mt-4">
+            <h4>Il y a {{ recettes.getTotalItemCount }} recettes au total</h4>
+        </div>
+        <table class="table table-hover mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Numéro</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prix</th>
+                    <th scope="col">Difficulté</th>
+                    <th scope="col">Date de création</th>
+                    <th scope="col">Edition</th>
+                    <th scope="col">Suppression</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recette in recettes %}
+                    <tr class="table-primary">
+                        <th scope="row">{{ recette.id }}</th>
+                        <td>{{ recette.nom }}</td>
+                        <td>{{ (recette.prix == null) ? 'Non renseigné': recette.prix }}</td>
+                        <td>{{ (recette.difficulte is same as(null)) ? 'Non renseigné': recette.difficulte }}</td>
+                        <td>{{ recette.createdAt|date("m/d/Y") }}</td>
+                        <td><a href="{{ path('recette.edit', {id: recette.id})}}" class="btn btn-info">Modifier</a></td>
+                        <td><a href="{{ path('recette.delete', {id: recette.id})}}" class="btn btn-warning">Supprimer</a></td>    
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation d-flex justify-content-center mt-4">
+            {{ knp_pagination_render(recettes) }}
+        </div>
+    </div>
+{% endblock %}
